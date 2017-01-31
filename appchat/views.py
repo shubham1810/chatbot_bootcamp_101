@@ -52,7 +52,8 @@ def reply_to_message(user_id, message):
 	url = 'https://graph.facebook.com/v2.6/me/messages?access_token=' + access_token
 
 	resp, attach_link = generate_response(message)
-	send_resp = {"recipient":{"id":user_id}, "message":{"text":resp, "attachment":{"type":"image", "payload":{"url": attach_link}}}}
+	#send_resp = {"recipient":{"id":user_id}, "message":{"text":resp, "attachment":{"type":"image", "payload":{"url": attach_link}}}}
+	send_resp = {"recipient":{"id":user_id}, "message":{"attachment":{"type":"image", "payload":{"url": attach_link}}}}
 	response_msg = json.dumps(send_resp)
 	status = requests.post(url, headers={"Content-Type": "application/json"},data=response_msg)
 	print status.json()
