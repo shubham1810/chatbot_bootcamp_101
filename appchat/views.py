@@ -60,3 +60,4 @@ def generate_response(msg):
 		'help': 'This is the help message. To use this chatbot, the list of commands are:',
 		'search': '',
 	}
+	return "ABCD"
