@@ -35,5 +35,25 @@ class ChatBot(generic.View):
 		return generic.View.dispatch(self, request, *args, **kwargs)
 
 	def post(self, request, *args, **kwargs):
-		print self.request.body
+		message = json.loads(self.request.body.encode('utf-8'))
+
+		for entry in message['entry']:
+			for msg in entry['messaging']:
+				print msg['message']['text']
+				reply_to_message(msg['sender']['id'], msg['message']['text'])
+
 		return HttpResponse("None")
+
+
+def reply_to_message(user_id, message):
+	access_token = 'EAAF8xZAqnxxMBAL41sCiZB7X3NXoZC1UNU8kZAmqNZASVtrHI4X7UkQM9GXJQfXb8R2yQ9KR5uZBZABSklRFyueQEbnttJ9IFcwzYsdEHBwSjZCcXLxlTpghPb4U5NQprcGKoyGTBJXsJpICo3mNfAh5KiIRbg9yIgg1crBDo0htxQZDZD'
+	url = 'https://graph.facebook.com/v2.6/me/messages?access_token=' + access_token
+
+	resp = generate_response(message)
+	send_resp = {"recipient":{"id":user_id}, "message":{"text":resp}}
+	response_msg = json.dumps(send_resp)
+	status = requests.post(url, headers={"Content-Type": "application/json"},data=response_msg)
+	print status.json()
+
+def generate_response(msg):
+	return "Welcome to Coding Blocks :)"
