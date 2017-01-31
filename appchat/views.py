@@ -9,6 +9,8 @@ from django.views.decorators.csrf import csrf_exempt
 import requests
 import json
 
+from giphy import get_gif
+
 # Create your views here.
 
 def testing(request):
@@ -49,15 +51,16 @@ def reply_to_message(user_id, message):
 	access_token = 'EAAF8xZAqnxxMBAL41sCiZB7X3NXoZC1UNU8kZAmqNZASVtrHI4X7UkQM9GXJQfXb8R2yQ9KR5uZBZABSklRFyueQEbnttJ9IFcwzYsdEHBwSjZCcXLxlTpghPb4U5NQprcGKoyGTBJXsJpICo3mNfAh5KiIRbg9yIgg1crBDo0htxQZDZD'
 	url = 'https://graph.facebook.com/v2.6/me/messages?access_token=' + access_token
 
-	resp = generate_response(message)
-	send_resp = {"recipient":{"id":user_id}, "message":{"text":resp}}
+	resp, attach_link = generate_response(message)
+	send_resp = {"recipient":{"id":user_id}, "message":{"text":resp, "attachment":{"type":"image", "payload":{"url": attach_link}}}}
 	response_msg = json.dumps(send_resp)
 	status = requests.post(url, headers={"Content-Type": "application/json"},data=response_msg)
 	print status.json()
 
 def generate_response(msg):
-	keywords = {
-		'help': 'This is the help message. To use this chatbot, the list of commands are:',
-		'search': '',
-	}
-	return "ABCD"
+	if 'search' in msg:
+		q = ''.join([ix for ix in msg.split('search', 1)[1]])
+	else:
+		q = msg
+	url_to_send, gif_link = get_gif(q)
+	return url_to_send, gif_link
