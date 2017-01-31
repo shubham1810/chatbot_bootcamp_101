@@ -40,9 +40,9 @@ class ChatBot(generic.View):
 		message = json.loads(self.request.body.encode('utf-8'))
 
 		for entry in message['entry']:
-			for msg in entry['messaging']:
-				print msg['message']['text']
-				reply_to_message(msg['sender']['id'], msg['message']['text'])
+			for msg in entry.get('messaging'):
+				print msg.get('message')['text']
+				reply_to_message(msg.get('sender')['id'], msg.get('message')['text'])
 
 		return HttpResponse("None")
 
@@ -64,4 +64,5 @@ def generate_response(msg):
 	else:
 		q = msg
 	url_to_send, gif_link = get_gif(q)
+	print gif_link
 	return url_to_send, gif_link
