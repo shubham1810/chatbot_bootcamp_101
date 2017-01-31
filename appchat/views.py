@@ -42,7 +42,11 @@ class ChatBot(generic.View):
 		for entry in message['entry']:
 			for msg in entry.get('messaging'):
 				print msg.get('message')
-				reply_to_message(msg.get('sender')['id'], msg.get('message')['text'])
+
+				if "text" in msg.get('message').keys():
+					reply_to_message(msg.get('sender')['id'], msg.get('message')['text'])
+				else:
+					print "Some Error!!!"
 
 		return HttpResponse("None")
 
