@@ -20,4 +20,7 @@ class CommonUrl(generic.View):
 class ChatBot(generic.View):
 
 	def get(self, request, *args, **kwargs):
-		return HttpResponse("chat")
+		if self.request.GET.get('hub.verify_token') == '123456789':
+			return HttpResponse(self.request.GET['hub.challenge'])
+		else:
+			return HttpResponse('Error, invalid token')
