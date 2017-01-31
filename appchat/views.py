@@ -41,7 +41,7 @@ class ChatBot(generic.View):
 
 		for entry in message['entry']:
 			for msg in entry.get('messaging'):
-				print msg.get('message')['text']
+				print msg.get('message')
 				reply_to_message(msg.get('sender')['id'], msg.get('message')['text'])
 
 		return HttpResponse("None")

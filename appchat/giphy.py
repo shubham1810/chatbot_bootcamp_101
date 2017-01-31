@@ -13,4 +13,4 @@ def get_gif(query):
 
 
 if __name__ == '__main__':
-	pass
+	print get_gif('many cat')
